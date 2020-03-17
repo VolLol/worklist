@@ -6,17 +6,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import ru.worklist.entites.SubworkEntity;
+import ru.worklist.entites.TagEntity;
 import ru.worklist.entites.UserEntity;
 import ru.worklist.entites.WorkEntity;
 import ru.worklist.repository.SubworkRepository;
+import ru.worklist.repository.TagRepository;
 import ru.worklist.repository.UserRepository;
 import ru.worklist.repository.WorkRepository;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 @SpringBootApplication
 public class WorklistApplication implements CommandLineRunner {
@@ -37,8 +37,11 @@ public class WorklistApplication implements CommandLineRunner {
     @Autowired
     SubworkRepository subworkRepository;
 
-    String USER1_USERNAME = "Helen";
-    public static final ZonedDateTime CURRENT_DATE = ZonedDateTime.of(2020, 4, 1, 1, 1, 1, 1, ZoneId.of("UTC"));
+    @Autowired
+    TagRepository tagRepository;
+
+    private String USER1_USERNAME = "Helen";
+    private static final ZonedDateTime CURRENT_DATE = ZonedDateTime.of(2020, 4, 1, 1, 1, 1, 1, ZoneId.of("UTC"));
 
     @Override
     public void run(String... args) {
@@ -60,6 +63,7 @@ public class WorklistApplication implements CommandLineRunner {
             System.out.println("Not exist done work for the last month");
         }
     }
+
 
     private void scenarioShowAllWillDoneTomorrow(UserEntity user) {
         List<WorkEntity> works3 = workRepository.findAllWillDoneTomorrow(user);
@@ -84,6 +88,37 @@ public class WorklistApplication implements CommandLineRunner {
 
     }
 
+    private void scenarioShowAllWorkswithSubworks(UserEntity user) {
+        List<SubworkEntity> subworkEntityList = subworkRepository.findAll();
+        if (!subworkEntityList.isEmpty()) {
+            Set<Long> uniqIds = new HashSet<>();
+
+            for (SubworkEntity subwork : subworkEntityList) {
+                uniqIds.add(subwork.getWork().getId());
+            }
+
+            ArrayList<Long> workIds = new ArrayList<>(uniqIds);
+
+            List<WorkEntity> workListWithSubworks = workRepository.findByIds(user, workIds);
+            for (WorkEntity work : workListWithSubworks) {
+                System.out.println(work);
+            }
+        } else System.out.println("Works with subworks not exist");
+    }
+
+
+    public void scenarioShowAllForNDays(Long days, UserEntity user) {
+        List<WorkEntity> worksForNDays = workRepository.findAllForNdays(user, CURRENT_DATE.plusDays(days));
+
+        if (!worksForNDays.isEmpty()) {
+            for (WorkEntity work : worksForNDays) {
+                System.out.println(work.getId() + " " + work.getSummary() + " " + work.getDescribe());
+            }
+        } else {
+            System.out.println("Not found works for " + days + " days");
+        }
+    }
+
     public void initializationBaseData() {
         UserEntity user = UserEntity.builder()
                 .username(USER1_USERNAME)
@@ -94,7 +129,7 @@ public class WorklistApplication implements CommandLineRunner {
             userRepository.save(user);
         }
         user = userRepository.findByUsername(USER1_USERNAME);
-/*
+
         WorkEntity workEntity = WorkEntity.builder()
                 .describe("Work 1 describe")
                 .summary("1.work 1")
@@ -106,7 +141,7 @@ public class WorklistApplication implements CommandLineRunner {
             System.out.println("Work with this summary already exist");
         }
 
-        workEntity = WorkEntity.builder()
+       /* workEntity = WorkEntity.builder()
                 .describe("Work 2 describe for check result that show all works finished in last month")
                 .summary("2.work 2")
                 .isDone(true)
@@ -114,15 +149,13 @@ public class WorklistApplication implements CommandLineRunner {
                 .user(user)
                 .build();
         workRepository.save(workEntity);
-*/
-       /* if (workRepository.findBySummaryAndUser("2.work 2", user) == null) {
+
+        if (workRepository.findBySummaryAndUser("2.work 2", user) == null) {
             workRepository.save(workEntity);
         } else {
             System.out.println("Work with this summary already exist");
         }
-        Чёт криво работает, проверить почему
-        */
-/*
+*/
 
         WorkEntity workEntity3 = WorkEntity.builder()
                 .summary("3.work 3")
@@ -139,38 +172,82 @@ public class WorklistApplication implements CommandLineRunner {
                 .user(user)
                 .build();
         workRepository.save(workEntity4);
-*/
-        /*WorkEntity workEntity5 = WorkEntity.builder()
+
+        WorkEntity workEntity5 = WorkEntity.builder()
                 .summary("5.work 5")
                 .describe("Work for scenario that will done in next month")
                 .planFinishedDate(CURRENT_DATE.plusDays(40))
                 .user(user)
                 .build();
-        workRepository.save(workEntity5);*/
+        workRepository.save(workEntity5);
 
-
-        WorkEntity workEntity = WorkEntity.builder()
-                .summary("6.work ")
-                .describe("Work fo scenario show that work has subwork")
+        WorkEntity workEntity6 = WorkEntity.builder()
                 .user(user)
+                .summary("6.work ")
+                .describe("Work for show all works with subworks")
                 .build();
-        workRepository.save(workEntity);
+        workRepository.save(workEntity6);
         SubworkEntity subworkEntity = SubworkEntity.builder()
+                .work(workEntity6)
                 .summary("One")
-                .work(workEntity)
                 .build();
         subworkRepository.save(subworkEntity);
-        subworkEntity = SubworkEntity.builder()
-                .summary("Two")
-                .work(workEntity)
-                .build();
-        subworkRepository.save(subworkEntity);
-        workRepository.save(workEntity);
-        System.out.println("SUCSEE " + workEntity.getSummary());
 
-        workRepository.findAllWorksWithSubworks(user);
+        subworkEntity = SubworkEntity.builder()
+                .work(workEntity6)
+                .summary("two")
+                .build();
+        subworkRepository.save(subworkEntity);
+
+        long days = 3L;
+        for (long i = 0; i <= days; i++) {
+            WorkEntity workEntity7 = WorkEntity.builder()
+                    .summary("7.work 7")
+                    .describe("Work for scenario that will next " + days + " day")
+                    .planFinishedDate(CURRENT_DATE.plusDays(i))
+                    .user(user)
+                    .build();
+            workRepository.save(workEntity7);
+        }
+
+        String stringOfTags = " one, two, three,";
+        String[] arrayOfTagsWithoutId = stringOfTags.split(",");
+        Set<TagEntity> setOfTags = new HashSet<>();
+        List<TagEntity> tagsFromRepository = tagRepository.findAll();
+
+        for (String str : arrayOfTagsWithoutId) {
+            if (tagsFromRepository.contains(str)) {
+                TagEntity tag = TagEntity.builder().tagText(str).build();
+                setOfTags.add(tag);
+                tagRepository.save(tag);
+
+            } else {
+                System.out.println("Tag " + str + " already exist");
+            }
+        }
+
+        WorkEntity workEntity8 = WorkEntity.builder()
+                .user(user)
+                .summary("8.work 8")
+                .describe("Work for scenario add tags")
+                .tags(setOfTags)
+                .build();
+        workRepository.save(workEntity8);
+/*
+
+        List<WorkEntity> worksWithTags = workRepository.findAllWorksWithTags(user);
+*/
+
+
+     /*   String certainTag = "";
+        List <WorkEntity> worksWithCertainTag = workRepository.findAllWorksWithCertainTag(user,certainTag);
+*/
+        System.out.println("Stop here");
+
 
     }
 
-
 }
+
+
+

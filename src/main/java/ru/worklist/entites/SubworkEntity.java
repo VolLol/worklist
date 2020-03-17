@@ -5,16 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.type.LongType;
-import org.hibernate.type.StringType;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "subworks_test")
-@Data
+@Table(name = "subworks")
 @Builder
+@Data
 @AllArgsConstructor
 public class SubworkEntity {
     @Id
@@ -44,5 +42,8 @@ public class SubworkEntity {
     @UpdateTimestamp
     @Column(name = "update_At")
     private Timestamp updateAt;
+
+    SubworkEntity() {
+    }
 
 }

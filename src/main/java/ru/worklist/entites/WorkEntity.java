@@ -5,14 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.type.*;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "works_test")
+@Table(name = "works")
 @Builder
 @AllArgsConstructor
 @Data
@@ -58,9 +57,10 @@ public class WorkEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @Column
-    @OneToMany(mappedBy = "works")
-    private List<SubworkEntity> subworks;
+    @ManyToMany
+    @JoinTable(name = "work_id_tag_id", joinColumns = @JoinColumn(name = "work_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<TagEntity> tags;
 
     public WorkEntity() {
     }
