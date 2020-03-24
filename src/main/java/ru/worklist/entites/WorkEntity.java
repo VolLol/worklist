@@ -3,6 +3,7 @@ package ru.worklist.entites;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,6 +16,8 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @Data
+@EqualsAndHashCode(of = {"id"})
+
 public class WorkEntity {
 
     @Id
@@ -57,7 +60,7 @@ public class WorkEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "work_id_tag_id", joinColumns = @JoinColumn(name = "work_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<TagEntity> tags;

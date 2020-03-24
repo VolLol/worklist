@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.worklist.entites.UserEntity;
 import ru.worklist.entites.WorkEntity;
+import ru.worklist.entites.TagEntity;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -33,7 +34,4 @@ public interface WorkRepository extends JpaRepository<WorkEntity, Long> {
     @Query("SELECT w from WorkEntity w where w.user = :user and w.planFinishedDate between '2020-04-02 00:00:00' and :timeEnd ")
     List<WorkEntity> findAllForNdays(@Param("user") UserEntity user, @Param("timeEnd") ZonedDateTime timeEnd);
 
-
- /*   @Query("SELECT w from WorkEntity where tags=? and w.use")
-    List<WorkEntity> findAllWorksWithTags(@Param("user") UserEntity user);*/
 }

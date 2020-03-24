@@ -156,7 +156,7 @@ public class WorklistApplication implements CommandLineRunner {
             System.out.println("Work with this summary already exist");
         }
 */
-
+/*
         WorkEntity workEntity3 = WorkEntity.builder()
                 .summary("3.work 3")
                 .describe("Work for scenario that will done tomorrow")
@@ -179,9 +179,9 @@ public class WorklistApplication implements CommandLineRunner {
                 .planFinishedDate(CURRENT_DATE.plusDays(40))
                 .user(user)
                 .build();
-        workRepository.save(workEntity5);
+        workRepository.save(workEntity5);*/
 
-        WorkEntity workEntity6 = WorkEntity.builder()
+     /*   WorkEntity workEntity6 = WorkEntity.builder()
                 .user(user)
                 .summary("6.work ")
                 .describe("Work for show all works with subworks")
@@ -208,40 +208,49 @@ public class WorklistApplication implements CommandLineRunner {
                     .user(user)
                     .build();
             workRepository.save(workEntity7);
-        }
-
-        String stringOfTags = " one, two, three,";
+        }*/
+/*
+        String stringOfTags = " one shfblkj , two, three,";
         String[] arrayOfTagsWithoutId = stringOfTags.split(",");
         Set<TagEntity> setOfTags = new HashSet<>();
         List<TagEntity> tagsFromRepository = tagRepository.findAll();
-
+        List<String> listTagsWithoutId = new ArrayList<>();
+        for (TagEntity tag : tagsFromRepository) {
+            listTagsWithoutId.add(tag.getTagText());
+        }
+        WorkEntity workEntity8 = new WorkEntity();
+        Set<WorkEntity> setOfWorks = new HashSet<>();
+        setOfWorks.add(workEntity8);
         for (String str : arrayOfTagsWithoutId) {
-            if (tagsFromRepository.contains(str)) {
-                TagEntity tag = TagEntity.builder().tagText(str).build();
+            if (!listTagsWithoutId.contains(str)) {
+                TagEntity tag = TagEntity.builder()
+                        .tagText(str)
+                        .works(setOfWorks)
+                        .build();
                 setOfTags.add(tag);
                 tagRepository.save(tag);
 
             } else {
-                System.out.println("Tag " + str + " already exist");
+                System.out.println("Tag " + str + " contains in database");
             }
+
         }
 
-        WorkEntity workEntity8 = WorkEntity.builder()
+        workEntity8 = WorkEntity.builder()
                 .user(user)
                 .summary("8.work 8")
                 .describe("Work for scenario add tags")
                 .tags(setOfTags)
                 .build();
-        workRepository.save(workEntity8);
-/*
+        workRepository.save(workEntity8);*/
 
-        List<WorkEntity> worksWithTags = workRepository.findAllWorksWithTags(user);
-*/
+        System.out.println("Stop here");
 
+        List<TagEntity> listWithTags = tagRepository.findAll();
+        for (TagEntity tag:listWithTags){
+            System.out.println(tag);
+        }
 
-     /*   String certainTag = "";
-        List <WorkEntity> worksWithCertainTag = workRepository.findAllWorksWithCertainTag(user,certainTag);
-*/
         System.out.println("Stop here");
 
 
