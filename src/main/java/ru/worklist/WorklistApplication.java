@@ -65,7 +65,7 @@ public class WorklistApplication implements CommandLineRunner {
     }
 
 
-    private void scenarioShowAllWillDoneTomorrow(UserEntity user) {
+    private void scenarioTwoShowAllWillDoneTomorrow(UserEntity user) {
         List<WorkEntity> works3 = workRepository.findAllWillDoneTomorrow(user);
         if (!works3.isEmpty()) {
             for (WorkEntity work : works3) {
@@ -76,7 +76,7 @@ public class WorklistApplication implements CommandLineRunner {
         }
     }
 
-    private void scenarioShowAllWillDoneInNextMonth(UserEntity user) {
+    private void scenarioThreeShowAllWillDoneInNextMonth(UserEntity user) {
         List<WorkEntity> works5 = workRepository.findAllWillDoneInNextMonth(user);
         if (!works5.isEmpty()) {
             for (WorkEntity work : works5) {
@@ -88,7 +88,7 @@ public class WorklistApplication implements CommandLineRunner {
 
     }
 
-    private void scenarioShowAllWorkswithSubworks(UserEntity user) {
+    private void scenarioFoureShowAllWorksWithSubworks(UserEntity user) {
         List<SubworkEntity> subworkEntityList = subworkRepository.findAll();
         if (!subworkEntityList.isEmpty()) {
             Set<Long> uniqIds = new HashSet<>();
@@ -107,7 +107,7 @@ public class WorklistApplication implements CommandLineRunner {
     }
 
 
-    public void scenarioShowAllForNDays(Long days, UserEntity user) {
+    public void scenarioFiveShowAllForNDays(Long days, UserEntity user) {
         List<WorkEntity> worksForNDays = workRepository.findAllForNdays(user, CURRENT_DATE.plusDays(days));
 
         if (!worksForNDays.isEmpty()) {
@@ -116,6 +116,30 @@ public class WorklistApplication implements CommandLineRunner {
             }
         } else {
             System.out.println("Not found works for " + days + " days");
+        }
+    }
+
+    public void scenarioSixShowAllWorksWithTags(UserEntity user){
+        List <WorkEntity> worksWithTags = workRepository.findAllWorksWithTags(user);
+        List <WorkEntity> worksOut = new ArrayList<>();
+        for (WorkEntity worksWithTag : worksWithTags) {
+            if (!worksOut.contains(worksWithTag)) {
+                WorkEntity ww = WorkEntity.builder()
+                        .id(worksWithTag.getId())
+                        .describe(worksWithTag.getDescribe())
+                        .user(worksWithTag.getUser())
+                        .planFinishedDate(worksWithTag.getPlanFinishedDate())
+                        .summary(worksWithTag.getSummary())
+                        .remainderBeforeSec(worksWithTag.getRemainderBeforeSec())
+                        .isDone(worksWithTag.isDone())
+                        .updateAt(worksWithTag.getUpdateAt())
+                        .isDeleted(worksWithTag.isDeleted())
+                        .createAt(worksWithTag.getCreateAt())
+                        .build();
+                worksOut.add(ww);
+            } else {
+                System.out.println("Exist in out worlist");
+            }
         }
     }
 
@@ -209,7 +233,7 @@ public class WorklistApplication implements CommandLineRunner {
                     .build();
             workRepository.save(workEntity7);
         }*/
-/*
+
         String stringOfTags = " one shfblkj , two, three,";
         String[] arrayOfTagsWithoutId = stringOfTags.split(",");
         Set<TagEntity> setOfTags = new HashSet<>();
@@ -242,14 +266,10 @@ public class WorklistApplication implements CommandLineRunner {
                 .describe("Work for scenario add tags")
                 .tags(setOfTags)
                 .build();
-        workRepository.save(workEntity8);*/
+        workRepository.save(workEntity8);
 
         System.out.println("Stop here");
 
-        List<TagEntity> listWithTags = tagRepository.findAll();
-        for (TagEntity tag:listWithTags){
-            System.out.println(tag);
-        }
 
         System.out.println("Stop here");
 
