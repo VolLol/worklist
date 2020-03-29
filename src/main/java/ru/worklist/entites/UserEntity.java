@@ -5,7 +5,8 @@ import org.hibernate.type.LongType;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
 @Builder

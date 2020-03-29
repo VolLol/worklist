@@ -1,9 +1,6 @@
 package ru.worklist.entites;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -11,7 +8,8 @@ import java.util.Set;
 @Entity
 @Table(name = "tags")
 @Builder
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"id"})
 public class TagEntity {

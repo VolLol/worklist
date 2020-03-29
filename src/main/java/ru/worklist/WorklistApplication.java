@@ -119,27 +119,12 @@ public class WorklistApplication implements CommandLineRunner {
         }
     }
 
-    public void scenarioSixShowAllWorksWithTags(UserEntity user){
-        List <WorkEntity> worksWithTags = workRepository.findAllWorksWithTags(user);
-        List <WorkEntity> worksOut = new ArrayList<>();
-        for (WorkEntity worksWithTag : worksWithTags) {
-            if (!worksOut.contains(worksWithTag)) {
-                WorkEntity ww = WorkEntity.builder()
-                        .id(worksWithTag.getId())
-                        .describe(worksWithTag.getDescribe())
-                        .user(worksWithTag.getUser())
-                        .planFinishedDate(worksWithTag.getPlanFinishedDate())
-                        .summary(worksWithTag.getSummary())
-                        .remainderBeforeSec(worksWithTag.getRemainderBeforeSec())
-                        .isDone(worksWithTag.isDone())
-                        .updateAt(worksWithTag.getUpdateAt())
-                        .isDeleted(worksWithTag.isDeleted())
-                        .createAt(worksWithTag.getCreateAt())
-                        .build();
-                worksOut.add(ww);
-            } else {
-                System.out.println("Exist in out worlist");
-            }
+    public void scenarioSixShowAllWorksWithTags(UserEntity user) {
+        List<WorkEntity> worksWithTags = workRepository.findAllWorksWithTags(user);
+        if (!worksWithTags.isEmpty()) {
+            System.out.println("Exist works with tags");
+        } else {
+            System.out.println("Not exist works with tags");
         }
     }
 
@@ -205,7 +190,8 @@ public class WorklistApplication implements CommandLineRunner {
                 .build();
         workRepository.save(workEntity5);*/
 
-     /*   WorkEntity workEntity6 = WorkEntity.builder()
+/*
+        WorkEntity workEntity6 = WorkEntity.builder()
                 .user(user)
                 .summary("6.work ")
                 .describe("Work for show all works with subworks")
@@ -222,8 +208,9 @@ public class WorklistApplication implements CommandLineRunner {
                 .summary("two")
                 .build();
         subworkRepository.save(subworkEntity);
+*/
 
-        long days = 3L;
+     /*   long days = 3L;
         for (long i = 0; i <= days; i++) {
             WorkEntity workEntity7 = WorkEntity.builder()
                     .summary("7.work 7")
@@ -234,7 +221,7 @@ public class WorklistApplication implements CommandLineRunner {
             workRepository.save(workEntity7);
         }*/
 
-        String stringOfTags = " one shfblkj , two, three,";
+        /*String stringOfTags = " one shfblkj , two, three,";
         String[] arrayOfTagsWithoutId = stringOfTags.split(",");
         Set<TagEntity> setOfTags = new HashSet<>();
         List<TagEntity> tagsFromRepository = tagRepository.findAll();
@@ -267,16 +254,20 @@ public class WorklistApplication implements CommandLineRunner {
                 .tags(setOfTags)
                 .build();
         workRepository.save(workEntity8);
+*/
+
 
         System.out.println("Stop here");
 
 
         System.out.println("Stop here");
-
 
     }
 
+
 }
+
+
 
 
 

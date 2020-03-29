@@ -1,9 +1,6 @@
 package ru.worklist.entites;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,7 +12,8 @@ import java.util.Set;
 @Table(name = "works")
 @Builder
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(of = {"id"})
 
 public class WorkEntity {
