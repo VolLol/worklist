@@ -1,5 +1,6 @@
 package ru.worklist;
 
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
@@ -24,7 +25,10 @@ public class WorklistApplication implements CommandLineRunner {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(WorklistApplication.class);
         app.setBannerMode(Banner.Mode.OFF);
-        app.run(args);
+        //    app.run(args);
+        ScenarioOne sc = new ScenarioOne();
+        sc.execute();
+        sc.print();
 
     }
 
@@ -46,6 +50,7 @@ public class WorklistApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
         System.out.println("IAMALIVE");
+
         initializationBaseData();
 
 
@@ -150,7 +155,20 @@ public class WorklistApplication implements CommandLineRunner {
             System.out.println("Work with this summary already exist");
         }
 
-       /* workEntity = WorkEntity.builder()
+        List<WorkEntity> works = workRepository.findAllBeforeDateByUser(true,
+                CURRENT_DATE.minusDays(30),
+                user);
+        if (!works.isEmpty()) {
+            for (WorkEntity work : works) {
+                System.out.println(work);
+            }
+        } else {
+            System.out.println("Not exist done work for the last month");
+        }
+/*
+
+
+        workEntity = WorkEntity.builder()
                 .describe("Work 2 describe for check result that show all works finished in last month")
                 .summary("2.work 2")
                 .isDone(true)
@@ -164,8 +182,6 @@ public class WorklistApplication implements CommandLineRunner {
         } else {
             System.out.println("Work with this summary already exist");
         }
-*/
-/*
         WorkEntity workEntity3 = WorkEntity.builder()
                 .summary("3.work 3")
                 .describe("Work for scenario that will done tomorrow")
@@ -188,9 +204,8 @@ public class WorklistApplication implements CommandLineRunner {
                 .planFinishedDate(CURRENT_DATE.plusDays(40))
                 .user(user)
                 .build();
-        workRepository.save(workEntity5);*/
+        workRepository.save(workEntity5);
 
-/*
         WorkEntity workEntity6 = WorkEntity.builder()
                 .user(user)
                 .summary("6.work ")
@@ -208,9 +223,8 @@ public class WorklistApplication implements CommandLineRunner {
                 .summary("two")
                 .build();
         subworkRepository.save(subworkEntity);
-*/
 
-     /*   long days = 3L;
+        long days = 3L;
         for (long i = 0; i <= days; i++) {
             WorkEntity workEntity7 = WorkEntity.builder()
                     .summary("7.work 7")
@@ -219,9 +233,9 @@ public class WorklistApplication implements CommandLineRunner {
                     .user(user)
                     .build();
             workRepository.save(workEntity7);
-        }*/
+        }
 
-        /*String stringOfTags = " one shfblkj , two, three,";
+        String stringOfTags = " one shfblkj , two, three,";
         String[] arrayOfTagsWithoutId = stringOfTags.split(",");
         Set<TagEntity> setOfTags = new HashSet<>();
         List<TagEntity> tagsFromRepository = tagRepository.findAll();
@@ -254,8 +268,8 @@ public class WorklistApplication implements CommandLineRunner {
                 .tags(setOfTags)
                 .build();
         workRepository.save(workEntity8);
-*/
 
+*/
 
         System.out.println("Stop here");
 

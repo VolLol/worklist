@@ -34,7 +34,7 @@ public interface WorkRepository extends JpaRepository<WorkEntity, Long> {
     List<WorkEntity> findAllForNdays(@Param("user") UserEntity user, @Param("timeEnd") ZonedDateTime timeEnd);
 
     @Query("SELECT distinct w FROM WorkEntity w JOIN w.tags where w.user = :user")
-    List <WorkEntity> findAllWorksWithTags(@Param("user") UserEntity user);
+    List<WorkEntity> findAllWorksWithTags(@Param("user") UserEntity user);
 
-
+    List<WorkEntity> findAll();
 }
