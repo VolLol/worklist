@@ -1,6 +1,5 @@
 package ru.worklist;
 
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
@@ -25,10 +24,7 @@ public class WorklistApplication implements CommandLineRunner {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(WorklistApplication.class);
         app.setBannerMode(Banner.Mode.OFF);
-        //    app.run(args);
-        ScenarioOne sc = new ScenarioOne();
-        sc.execute();
-        sc.print();
+        app.run(args);
 
     }
 
@@ -47,14 +43,18 @@ public class WorklistApplication implements CommandLineRunner {
     private String USER1_USERNAME = "Helen";
     private static final ZonedDateTime CURRENT_DATE = ZonedDateTime.of(2020, 4, 1, 1, 1, 1, 1, ZoneId.of("UTC"));
 
+    @Autowired
+    ScenarioOne scenarioOne;
+
+
     @Override
     public void run(String... args) {
         System.out.println("IAMALIVE");
-
-        initializationBaseData();
-
-
+        //initializationBaseData();
+        scenarioOne.execute(userRepository.findByUsername("USER1_USERNAME"));
+        scenarioOne.print();
     }
+
 
     private void scenarioOneShowAllDoneWorkForLastMonth(UserEntity user) {
         List<WorkEntity> works = workRepository.findAllBeforeDateByUser(true,
@@ -165,8 +165,6 @@ public class WorklistApplication implements CommandLineRunner {
         } else {
             System.out.println("Not exist done work for the last month");
         }
-/*
-
 
         workEntity = WorkEntity.builder()
                 .describe("Work 2 describe for check result that show all works finished in last month")
@@ -269,7 +267,6 @@ public class WorklistApplication implements CommandLineRunner {
                 .build();
         workRepository.save(workEntity8);
 
-*/
 
         System.out.println("Stop here");
 
