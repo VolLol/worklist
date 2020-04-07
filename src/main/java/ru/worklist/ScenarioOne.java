@@ -1,22 +1,26 @@
 package ru.worklist;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.worklist.entites.UserEntity;
 import ru.worklist.entites.WorkEntity;
+import ru.worklist.repository.UserRepository;
+import ru.worklist.repository.WorkRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ScenarioOne extends PrintClass {
+public class ScenarioOne extends BaseScenario {
+    @Autowired
+    protected WorkRepository workRepository;
+    @Autowired
+    protected UserRepository userRepository;
 
-    //добавить автоматическое дополнение колонок
-
-
-    public void execute(UserEntity user) {
-
-        List<WorkEntity> works = workRepository.findAll(); //разобраться почему не работает поиск по дате?
-
+    public void execute() {
+        UserEntity user = userRepository.findByUserId(1l);
+        List<WorkEntity> works = workRepository.findAllBeforeDateByUser(true,
+                CURRENT_DATE,user);
         if (!works.isEmpty()) {
             for (WorkEntity work : works) {
                 List<String> workOut = new ArrayList<>();
@@ -25,13 +29,15 @@ public class ScenarioOne extends PrintClass {
                 workOut.add(work.getDescribe());
                 data.add(workOut);
             }
+            //добавить автоматическое дополнение колонок
             columnName.add("work_id");
             columnName.add("summary");
             columnName.add("describe");
+            message = "I found this works for the last month";
         } else {
-            System.out.println("Not exist done work for the last month");
+            message = "Not exist done work for the last month";
         }
-        message = "I found this works for the last month";
+            print();
     }
 }
 

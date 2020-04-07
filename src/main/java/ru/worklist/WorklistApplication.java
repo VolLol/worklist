@@ -51,8 +51,8 @@ public class WorklistApplication implements CommandLineRunner {
     public void run(String... args) {
         System.out.println("IAMALIVE");
         //initializationBaseData();
-        scenarioOne.execute(userRepository.findByUsername("USER1_USERNAME"));
-        scenarioOne.print();
+
+       scenarioOne.execute();
     }
 
 
@@ -170,7 +170,16 @@ public class WorklistApplication implements CommandLineRunner {
                 .describe("Work 2 describe for check result that show all works finished in last month")
                 .summary("2.work 2")
                 .isDone(true)
-                .planFinishedDate(ZonedDateTime.of(2020, 2, 1, 1, 1, 1, 1, ZoneId.of("UTC")))
+                .planFinishedDate(ZonedDateTime.of(2020, 3, 2, 1, 1, 1, 1, ZoneId.of("UTC")))
+                .user(user)
+                .build();
+        workRepository.save(workEntity);
+
+        workEntity = WorkEntity.builder()
+                .describe("Work 2.1 describe for check result that show all works finished in last month")
+                .summary("2.work 2.1")
+                .isDone(true)
+                .planFinishedDate(ZonedDateTime.of(2020, 3, 2, 1, 1, 1, 1, ZoneId.of("UTC")))
                 .user(user)
                 .build();
         workRepository.save(workEntity);

@@ -8,12 +8,10 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PrintClass {
+public abstract class BaseScenario {
 
     protected List<String> columnName = new ArrayList<>();
     protected List<List<String>> data = new ArrayList<>();
-    @Autowired
-    protected WorkRepository workRepository;
     protected List<String> formatOfColumns = new ArrayList<>();//формат строки
     protected List<Integer> sizeOfColumn = new ArrayList<>();//длинна каждой строки
     protected int N = 30; //стандартный размер колонки
