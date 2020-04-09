@@ -1,7 +1,6 @@
 package ru.worklist.entites;
 
 import lombok.*;
-import org.hibernate.type.LongType;
 
 import javax.persistence.*;
 

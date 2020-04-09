@@ -13,6 +13,7 @@ import ru.worklist.repository.SubworkRepository;
 import ru.worklist.repository.TagRepository;
 import ru.worklist.repository.UserRepository;
 import ru.worklist.repository.WorkRepository;
+import ru.worklist.scenarios.*;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -46,92 +47,28 @@ public class WorklistApplication implements CommandLineRunner {
     @Autowired
     ScenarioOne scenarioOne;
 
+    @Autowired
+    ScenarioTwo scenarioTwo;
+
+    @Autowired
+    ScenarioThree scenarioThree;
+
+    @Autowired
+    ScenarioFour scenarioFour;
+
+    @Autowired
+    ScenarioFive scenarioFive;
+
+    @Autowired
+    ScenarioSix scenarioSix;
 
     @Override
     public void run(String... args) {
         System.out.println("IAMALIVE");
         //initializationBaseData();
-
-       scenarioOne.execute();
+        scenarioSix.execute();
     }
 
-
-    private void scenarioOneShowAllDoneWorkForLastMonth(UserEntity user) {
-        List<WorkEntity> works = workRepository.findAllBeforeDateByUser(true,
-                CURRENT_DATE.minusDays(30),
-                user);
-        if (!works.isEmpty()) {
-            for (WorkEntity work : works) {
-                System.out.println(work);
-            }
-        } else {
-            System.out.println("Not exist done work for the last month");
-        }
-    }
-
-
-    private void scenarioTwoShowAllWillDoneTomorrow(UserEntity user) {
-        List<WorkEntity> works3 = workRepository.findAllWillDoneTomorrow(user);
-        if (!works3.isEmpty()) {
-            for (WorkEntity work : works3) {
-                System.out.println(work.getSummary() + " " + work.getDescribe());
-            }
-        } else {
-            System.out.println("Not exist work for tomorrow");
-        }
-    }
-
-    private void scenarioThreeShowAllWillDoneInNextMonth(UserEntity user) {
-        List<WorkEntity> works5 = workRepository.findAllWillDoneInNextMonth(user);
-        if (!works5.isEmpty()) {
-            for (WorkEntity work : works5) {
-                System.out.println(work.getSummary() + " " + work.getDescribe());
-            }
-        } else {
-            System.out.println("Not exist work for next month");
-        }
-
-    }
-
-    private void scenarioFoureShowAllWorksWithSubworks(UserEntity user) {
-        List<SubworkEntity> subworkEntityList = subworkRepository.findAll();
-        if (!subworkEntityList.isEmpty()) {
-            Set<Long> uniqIds = new HashSet<>();
-
-            for (SubworkEntity subwork : subworkEntityList) {
-                uniqIds.add(subwork.getWork().getId());
-            }
-
-            ArrayList<Long> workIds = new ArrayList<>(uniqIds);
-
-            List<WorkEntity> workListWithSubworks = workRepository.findByIds(user, workIds);
-            for (WorkEntity work : workListWithSubworks) {
-                System.out.println(work);
-            }
-        } else System.out.println("Works with subworks not exist");
-    }
-
-
-    public void scenarioFiveShowAllForNDays(Long days, UserEntity user) {
-        List<WorkEntity> worksForNDays = workRepository.findAllForNdays(user, CURRENT_DATE.plusDays(days));
-
-        if (!worksForNDays.isEmpty()) {
-            for (WorkEntity work : worksForNDays) {
-                System.out.println(work.getId() + " " + work.getSummary() + " " + work.getDescribe());
-            }
-        } else {
-            System.out.println("Not found works for " + days + " days");
-        }
-    }
-
-    public void scenarioSixShowAllWorksWithTags(UserEntity user) {
-        List<WorkEntity> worksWithTags = workRepository.findAllWorksWithTags(user);
-        if (!worksWithTags.isEmpty()) {
-            System.out.println("Exist works with tags");
-        } else {
-            System.out.println("Not exist works with tags");
-        }
-    }
 
     public void initializationBaseData() {
         UserEntity user = UserEntity.builder()

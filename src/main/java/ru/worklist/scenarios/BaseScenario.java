@@ -1,7 +1,4 @@
-package ru.worklist;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import ru.worklist.repository.WorkRepository;
+package ru.worklist.scenarios;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -10,7 +7,7 @@ import java.util.List;
 
 public abstract class BaseScenario {
 
-    protected List<String> columnName = new ArrayList<>();
+    protected List<String> columnNames = new ArrayList<>();
     protected List<List<String>> data = new ArrayList<>();
     protected List<String> formatOfColumns = new ArrayList<>();//формат строки
     protected List<Integer> sizeOfColumn = new ArrayList<>();//длинна каждой строки
@@ -18,9 +15,9 @@ public abstract class BaseScenario {
     protected static final ZonedDateTime CURRENT_DATE = ZonedDateTime.of(2020, 4, 1, 1, 1, 1, 1, ZoneId.of("UTC"));
     protected String message;//сообщение выводимое перед таблицей
 
-    public void print() {
+    public void showTable() {
         System.out.println(message);
-        for (String s : columnName) {
+        for (String s : columnNames) {
             int sLen = s.length();
             String args;
             if (s.contains("id")) {
@@ -70,6 +67,15 @@ public abstract class BaseScenario {
 
             }
         }
+        System.out.println("\n");
+            clearAllLists();
+    }
+
+    private void clearAllLists() {
+        columnNames.clear();
+        data.clear();
+        formatOfColumns.clear();
+        sizeOfColumn.clear();
     }
 }
 
