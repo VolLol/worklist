@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ScenarioFive extends BaseScenario {
+public class ScenarioFive extends ScenarioBase {
 
     private final
     WorkRepository workRepository;

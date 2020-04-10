@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-public class ScenarioFour extends BaseScenario {
+public class ScenarioFour extends ScenarioBase {
 
 
     private final SubworkRepository subworkRepository;
@@ -27,7 +27,7 @@ public class ScenarioFour extends BaseScenario {
         this.workRepository = workRepository;
     }
 
-    public void execute() {
+    public void execute(Long userId) {
         UserEntity user = userRepository.findByUserId(1L);
         List<SubworkEntity> subworkEntityList = subworkRepository.findAll();
         if (!subworkEntityList.isEmpty()) {

@@ -5,8 +5,8 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseScenario {
-
+public abstract class ScenarioBase {
+//таблица ТОЛЬКО жрёт данные
     protected List<String> columnNames = new ArrayList<>();
     protected List<List<String>> data = new ArrayList<>();
     protected List<String> formatOfColumns = new ArrayList<>();//формат строки
@@ -69,6 +69,10 @@ public abstract class BaseScenario {
         }
         System.out.println("\n");
             clearAllLists();
+    }
+
+    public void testExecute(){
+
     }
 
     private void clearAllLists() {
